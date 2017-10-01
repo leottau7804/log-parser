@@ -1,6 +1,6 @@
 package com.ef.model;
 
-import com.sun.istack.internal.NotNull;
+
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,27 +19,23 @@ public class AccessLog implements Serializable{
      */
     @Id
     @Column(name = "id", nullable = false)
-    @NotNull
     private long id;
 
     /**
      * IP
      */
-    @NotNull
     @Column(name = "ip", nullable = false)
     private String ip;
 
     /**
      * Acess log date
      */
-    @NotNull
     @Column(name = "date", nullable = false)
     private Date date;
 
     /**
      * Access log complete text
      */
-    @NotNull
     @Column(name = "log", nullable = false)
     private String log;
 

@@ -2,6 +2,7 @@ package com.ef;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -10,12 +11,18 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.Database;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 /**
  * Application spring configuration class
- *
+ * <p>
  * Created by sergio.leottau on 30/09/17.
  */
 
@@ -40,6 +47,48 @@ public class AppConfigurator {
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertyConfig() {
         return new PropertySourcesPlaceholderConfigurer();
+    }
+
+
+    @Bean
+    public HibernateJpaVendorAdapter jpaVendorAdapter() {
+        HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
+
+        adapter.setShowSql(false);
+        adapter.setDatabase(Database.MYSQL);
+
+        return adapter;
+    }
+
+    /**
+     * The entity manager defined for communication with pol_v4 database
+     *
+     * @param dataSource the data source
+     * @return a LocalContainerEntityManagerFactoryBean
+     */
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(
+            DataSource dataSource,
+            JpaVendorAdapter jpaVendorAdapter) {
+        LocalContainerEntityManagerFactoryBean lef
+                = new LocalContainerEntityManagerFactoryBean();
+
+        lef.setDataSource(dataSource);
+        lef.setJpaVendorAdapter(jpaVendorAdapter);
+        lef.setPackagesToScan("com.ef");
+
+        return lef;
+    }
+
+
+    @Bean
+    public JpaTransactionManager transactionManager(EntityManagerFactory emf,
+                                                    DataSource dataSource) {
+
+        JpaTransactionManager txManager = new JpaTransactionManager(emf);
+        txManager.setDataSource(dataSource);
+
+        return txManager;
     }
 
 

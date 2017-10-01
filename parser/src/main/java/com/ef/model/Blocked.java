@@ -1,6 +1,5 @@
 package com.ef.model;
 
-import com.sun.istack.internal.NotNull;
 
 import javax.persistence.*;
 
@@ -17,20 +16,17 @@ public class Blocked {
      */
     @Id
     @Column(name = "id", nullable = false)
-    @NotNull
     private long id;
 
     /**
      * IP
      */
-    @NotNull
     @Column(name = "ip", nullable = false)
     private String ip;
 
     /**
      * Reason of why the IP address is blocked
      */
-    @NotNull
     @Column(name = "observations", nullable = false)
     private String observations;
 

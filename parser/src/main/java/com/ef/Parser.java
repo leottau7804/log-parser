@@ -1,12 +1,14 @@
 package com.ef;
 
+import com.beust.jcommander.JCommander;
+import com.ef.services.Router;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**
  * Starter class.
- *
+ * <p>
  * Created by sergio.leottau on 30/09/17.
  */
 public class Parser {
@@ -26,6 +28,15 @@ public class Parser {
         appContext.register(AppConfigurator.class);
         appContext.refresh();
 
+
+        Router router = appContext.getBean(Router.class);
+
+        JCommander.newBuilder()
+                .addObject(router)
+                .build()
+                .parse(args);
+
+        router.route();
 
         LOGGER.info("################[ACCESS LOG PARSER - FINISH]#################");
     }
