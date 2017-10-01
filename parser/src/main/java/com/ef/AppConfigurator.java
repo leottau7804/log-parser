@@ -2,7 +2,6 @@ package com.ef;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -28,7 +27,7 @@ import javax.sql.DataSource;
 
 @ComponentScan(basePackages = "com.ef")
 @EnableJpaRepositories(basePackages = "com.ef.repositories")
-@PropertySource("classpath:database.properties")
+@PropertySource("classpath:parser.properties")
 @Configuration
 public class AppConfigurator {
 
@@ -50,6 +49,11 @@ public class AppConfigurator {
     }
 
 
+    /**
+     * JPA vendor adapter
+     *
+     * @return the vendor adapter built
+     */
     @Bean
     public HibernateJpaVendorAdapter jpaVendorAdapter() {
         HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
@@ -81,6 +85,12 @@ public class AppConfigurator {
     }
 
 
+    /**
+     * Transaction manager
+     * @param emf entity manager factory
+     * @param dataSource datasource
+     * @return the JPA transaction manager built
+     */
     @Bean
     public JpaTransactionManager transactionManager(EntityManagerFactory emf,
                                                     DataSource dataSource) {

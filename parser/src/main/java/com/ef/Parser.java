@@ -19,6 +19,12 @@ public class Parser {
     private static final Logger LOGGER = LoggerFactory
             .getLogger(Parser.class);
 
+
+    /**
+     * Main process
+     *
+     * @param args arguments.
+     */
     public static void main(String[] args) {
 
         LOGGER.info("################[ACCESS LOG PARSER - BEGIN]#################");

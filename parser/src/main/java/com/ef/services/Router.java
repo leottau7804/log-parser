@@ -5,5 +5,8 @@ package com.ef.services;
  */
 public interface Router {
 
+    /**
+     * Route to a processor according to the arguments given.
+     */
     void route();
 }

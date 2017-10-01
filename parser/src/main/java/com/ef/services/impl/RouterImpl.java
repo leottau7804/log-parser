@@ -19,6 +19,8 @@ import org.apache.commons.lang3.StringUtils;
 import javax.annotation.PostConstruct;
 
 /**
+ * This class route to a processor according to the arguments given.
+ *
  * Created by sergio.leottau on 1/10/17.
  */
 @Parameters(separators = "=")
@@ -29,7 +31,7 @@ public class RouterImpl implements Router {
      * Logger configuration.
      */
     private static final Logger LOGGER = LoggerFactory
-            .getLogger(Parser.class);
+            .getLogger(Router.class);
 
     @Parameter(names = "--logFile")
     private String logFile;
