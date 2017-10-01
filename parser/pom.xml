@@ -168,7 +168,7 @@
             </exclusions>
         </dependency>
         <!-- Hibernate dependencies-->
-        
+
     </dependencies>
 
 
