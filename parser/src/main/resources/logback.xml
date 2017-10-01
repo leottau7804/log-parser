@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- The appender configuration for console logging. -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>|%d{HH:mm:ss.SSS}|%-5level| %msg%n
+            </Pattern>
+        </layout>
+    </appender>
+
+
+    <logger name="com.payulatam.pps.shipping.api" level="DEBUG" />
+
+    <logger name="org.springframework" level="INFO" />
+
+    <logger name="ch.qos.logback" level="ERROR" />
+    <logger name="org.jboss.logging" level="ERROR" />
+    <logger name="org.apache.http" level="ERROR" />
+    <logger name="org.hibernate" level="INFO" />
+
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>
