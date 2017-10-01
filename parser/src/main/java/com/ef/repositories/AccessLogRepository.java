@@ -1,6 +1,7 @@
 package com.ef.repositories;
 
 import com.ef.model.AccessLog;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Date;
@@ -25,4 +26,16 @@ public interface AccessLogRepository extends CrudRepository<AccessLog, Integer> 
      * @return list with access logs
      */
     List<AccessLog> findByIpAndDateGreaterThanEqualAndDateLessThanEqual(String ip, Date begin, Date end);
+
+    /**
+     * This method is in charge to search all IPs address that has more access log than a given value in a period of time.
+     *
+     * @param begin     start date
+     * @param end       end date
+     * @param threshold amount of access log
+     * @return a list with de IPs address found.
+     */
+    @Query(nativeQuery = true,
+            value = "SELECT ip FROM parser.access_log WHERE  date >= ?1 AND date <= ?2 GROUP BY ip HAVING count(ip) > ?3")
+    List<String> findByDateAndThreshold(Date begin, Date end, Integer threshold);
 }

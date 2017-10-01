@@ -11,8 +11,8 @@ CREATE TABLE IF NOT EXISTS `parser`.`access_log` (
   INDEX `by_ip_and_date` (`ip` ASC, `date` ASC));
 
   CREATE TABLE IF NOT EXISTS `parser`.`blocked` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `ip` VARCHAR(100) NOT NULL,
-  `observatios` VARCHAR(45) NULL,
+  `observations` VARCHAR(500) NULL,
   PRIMARY KEY (`id`));
 

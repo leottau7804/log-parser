@@ -3,9 +3,8 @@ package com.ef.services.impl;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 
-import com.ef.Parser;
-import com.ef.processors.Processor;
 import com.ef.processors.impl.ParserProcessor;
+import com.ef.processors.impl.SearchProcessor;
 import com.ef.services.Router;
 
 import org.slf4j.Logger;
@@ -20,7 +19,7 @@ import javax.annotation.PostConstruct;
 
 /**
  * This class route to a processor according to the arguments given.
- *
+ * <p>
  * Created by sergio.leottau on 1/10/17.
  */
 @Parameters(separators = "=")
@@ -76,7 +75,14 @@ public class RouterImpl implements Router {
         }
 
         if (isStartDateValid && isThresHoldValid && isDurationValid) {
-            LOGGER.error("Log searching processor");
+            LOGGER.debug("Log searching processor");
+
+            SearchProcessor processor = applicationContext.getBean(SearchProcessor.class);
+            processor.setStartDate(startDate);
+            processor.setThreshold(threshold);
+            processor.setDuration(duration);
+            processor.process();
+
 
         } else if (isStartDateValid || isThresHoldValid || isDurationValid) {
             LOGGER.error("To do a search you must specify all search parameters (startDate, threshold, duration).");

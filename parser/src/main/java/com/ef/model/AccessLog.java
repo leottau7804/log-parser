@@ -1,7 +1,5 @@
 package com.ef.model;
 
-
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -22,13 +20,13 @@ public class AccessLog implements Serializable{
     private long id;
 
     /**
-     * IP
+     * IP address
      */
     @Column(name = "ip", nullable = false)
     private String ip;
 
     /**
-     * Acess log date
+     * Access log date
      */
     @Column(name = "date", nullable = false)
     private Date date;
