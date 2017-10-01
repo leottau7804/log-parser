@@ -60,6 +60,7 @@
         </plugins>
     </build>
 
+    <!-- Spring-->
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -112,6 +113,9 @@
             <artifactId>spring-jdbc</artifactId>
             <version>${spring.version}</version>
         </dependency>
+        <!-- Spring-->
+
+        <!-- Log-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -137,11 +141,34 @@
             <artifactId>logback-classic</artifactId>
             <version>${logback-version}</version>
         </dependency>
+        <!-- Log-->
+
+        <!-- Mysql connector-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.34</version>
         </dependency>
+        <!-- Mysql connector-->
+
+        <!-- Hibernate dependencies-->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>3.5.1-Final</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>antlr</artifactId>
+                    <groupId>antlr</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- Hibernate dependencies-->
+        
     </dependencies>
 
 

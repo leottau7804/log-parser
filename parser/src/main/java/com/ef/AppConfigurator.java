@@ -8,6 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
@@ -19,6 +20,7 @@ import javax.sql.DataSource;
  */
 
 @ComponentScan(basePackages = "com.ef")
+@EnableJpaRepositories(basePackages = "com.ef.repositories")
 @PropertySource("classpath:database.properties")
 @Configuration
 public class AppConfigurator {
