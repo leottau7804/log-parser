@@ -1,5 +1,7 @@
 package com.ef.processors.impl;
 
+import com.ef.exception.ParserCode;
+import com.ef.exception.ParserException;
 import com.ef.model.Blocked;
 import com.ef.model.DurationEnum;
 import com.ef.processors.Processor;
@@ -73,41 +75,40 @@ public class SearchProcessor implements Processor {
     @Override
     public void process() {
 
-        if (validate()) {
+        validate();
 
-            Date start = DateUtil.convertToDate(dateFormat, startDate);
+        Date start = DateUtil.convertToDate(dateFormat, startDate);
 
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(start);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(start);
 
-            switch (durationEnum) {
-                case HOURLY:
-                    calendar.add(Calendar.HOUR, 1);
-                    break;
-                case DAILY:
-                    calendar.add(Calendar.DAY_OF_MONTH, 1);
-                    break;
-            }
-            Date end = calendar.getTime();
-
-
-            List<String> ips = accessLogRepository.findByDateAndThreshold(start, end, threshold);
-
-            for (String ip : ips) {
-                MessageFormat messageFormat = new MessageFormat("The ip {0} has more than {1} access between {2} and {3}");
-                String message = messageFormat.format(new Object[]{ip, threshold,
-                        DateUtil.convertToString(dateFormat, start), DateUtil.convertToString(dateFormat, end)});
-                LOGGER.info(message);
-
-                Blocked blocked = new Blocked();
-                blocked.setIp(ip);
-                blocked.setObservations(message);
-                blockedRepository.save(blocked);
-            }
-
-            LOGGER.info("A total of {} IPs address were found and blocked", ips.size());
-
+        switch (durationEnum) {
+            case HOURLY:
+                calendar.add(Calendar.HOUR, 1);
+                break;
+            case DAILY:
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                break;
         }
+        Date end = calendar.getTime();
+
+
+        List<String> ips = accessLogRepository.findByDateAndThreshold(start, end, threshold);
+
+        for (String ip : ips) {
+            MessageFormat messageFormat = new MessageFormat("The ip {0} has more than {1} access between {2} and {3}");
+            String message = messageFormat.format(new Object[]{ip, threshold,
+                    DateUtil.convertToString(dateFormat, start), DateUtil.convertToString(dateFormat, end)});
+            LOGGER.info(message);
+
+            Blocked blocked = new Blocked();
+            blocked.setIp(ip);
+            blocked.setObservations(message);
+            blockedRepository.save(blocked);
+        }
+
+        LOGGER.info("A total of {} IPs address were found and blocked", ips.size());
+
 
     }
 
@@ -116,32 +117,29 @@ public class SearchProcessor implements Processor {
      *
      * @return true if the arguments are valid, or false otherwise.
      */
-    private boolean validate() {
+    private void validate() {
         Validate.notNull(startDate, "You must specify a start date to does a search");
         Validate.notNull(threshold, "You must specify a threshold to does a search");
         Validate.notNull(duration, "You must specify a duration to does a search");
 
-        boolean isValid = true;
-
-
         if (!DateUtil.isValid(dateFormat, startDate)) {
-            LOGGER.error("Invalid date format, try a date argument with a format like {}.", dateFormat);
-            isValid = false;
+            throw new ParserException(ParserCode.INVALID_DATE_FORMAT, dateFormat);
         }
 
         if (threshold < 0) {
-            LOGGER.error("Invalid threshold, this argument can not be negative.");
-            isValid = false;
+            throw new ParserException(ParserCode.INVALID_THRESHOLD);
         }
 
         try {
             durationEnum = DurationEnum.valueOf(duration.toUpperCase());
         } catch (IllegalArgumentException e) {
-            LOGGER.error("Invalid duration value. The only duration valid values are: hourly or daily");
-            isValid = false;
+            throw new ParserException(ParserCode.INVALID_DURATION);
         }
 
-        return isValid;
+    }
+
+    public void setDateFormat(String dateFormat) {
+        this.dateFormat = dateFormat;
     }
 
     public String getStartDate() {

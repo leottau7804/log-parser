@@ -1,6 +1,8 @@
 package com.ef.processors.impl;
 
 
+import com.ef.exception.ParserCode;
+import com.ef.exception.ParserException;
 import com.ef.extracters.DateExtractor;
 import com.ef.extracters.IpExtractor;
 import com.ef.model.AccessLog;
@@ -81,7 +83,7 @@ public class ParserProcessor implements Processor {
 
             LOGGER.info("Process results: successfully parsed {}, failed parsed {}", successful, failed);
         } catch (FileNotFoundException e) {
-            LOGGER.error("The file that you specify does not exist: [{}]", logFile);
+            throw new ParserException(ParserCode.LOG_FILE_NOT_FOUND, logFile);
         }
 
     }
