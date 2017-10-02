@@ -19,6 +19,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+
 /**
  * Application spring configuration class
  * <p>
@@ -27,7 +28,7 @@ import javax.sql.DataSource;
 
 @ComponentScan(basePackages = "com.ef")
 @EnableJpaRepositories(basePackages = "com.ef.repositories")
-@PropertySource("classpath:parser.properties")
+@PropertySource("file:parser.properties")
 @Configuration
 public class AppConfigurator {
 
@@ -81,13 +82,15 @@ public class AppConfigurator {
         lef.setJpaVendorAdapter(jpaVendorAdapter);
         lef.setPackagesToScan("com.ef");
 
+
+
         return lef;
     }
 
-
     /**
      * Transaction manager
-     * @param emf entity manager factory
+     *
+     * @param emf        entity manager factory
      * @param dataSource datasource
      * @return the JPA transaction manager built
      */
@@ -126,6 +129,7 @@ public class AppConfigurator {
         dataSource.setUrl(url);
         dataSource.setUsername(username);
         dataSource.setPassword(password);
+
 
         return dataSource;
     }

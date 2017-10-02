@@ -1,6 +1,7 @@
 package com.ef;
 
 import com.beust.jcommander.JCommander;
+import com.ef.exception.ParserException;
 import com.ef.services.Router;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,20 +30,24 @@ public class Parser {
 
         LOGGER.info("################[ACCESS LOG PARSER - BEGIN]#################");
 
-        AnnotationConfigApplicationContext appContext
-                = new AnnotationConfigApplicationContext();
-        appContext.register(AppConfigurator.class);
-        appContext.refresh();
+        try {
+            AnnotationConfigApplicationContext appContext
+                    = new AnnotationConfigApplicationContext();
+            appContext.register(AppConfigurator.class);
+            appContext.refresh();
 
 
-        Router router = appContext.getBean(Router.class);
+            Router router = appContext.getBean(Router.class);
 
-        JCommander.newBuilder()
-                .addObject(router)
-                .build()
-                .parse(args);
+            JCommander.newBuilder()
+                    .addObject(router)
+                    .build()
+                    .parse(args);
 
-        router.route();
+            router.route();
+        } catch (ParserException e) {
+            LOGGER.error(e.getMessage());
+        }
 
         LOGGER.info("################[ACCESS LOG PARSER - FINISH]#################");
     }

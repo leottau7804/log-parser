@@ -3,6 +3,8 @@ package com.ef.services.impl;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 
+import com.ef.exception.ParserCode;
+import com.ef.exception.ParserException;
 import com.ef.processors.impl.ParserProcessor;
 import com.ef.processors.impl.SearchProcessor;
 import com.ef.services.Router;
@@ -59,13 +61,12 @@ public class RouterImpl implements Router {
 
         boolean isLogFileValid = StringUtils.isNotBlank(logFile);
         boolean isStartDateValid = StringUtils.isNotBlank(startDate);
-        boolean isThresHoldValid = threshold != null;
+        boolean isThresholdValid = threshold != null;
         boolean isDurationValid = StringUtils.isNotBlank(duration);
 
 
-        if (!isLogFileValid && !isStartDateValid && !isThresHoldValid && !isDurationValid) {
-            LOGGER.error("You must specify either access log path (logFile) or searching parameters (startDate, threshold, duration)");
-
+        if (!isLogFileValid && !isStartDateValid && !isThresholdValid && !isDurationValid) {
+            throw new ParserException(ParserCode.INVALID_ARGUMENTS);
         } else if (isLogFileValid) {
             LOGGER.debug("Log parser processor");
 
@@ -74,7 +75,7 @@ public class RouterImpl implements Router {
             processor.process();
         }
 
-        if (isStartDateValid && isThresHoldValid && isDurationValid) {
+        if (isStartDateValid && isThresholdValid && isDurationValid) {
             LOGGER.debug("Log searching processor");
 
             SearchProcessor processor = applicationContext.getBean(SearchProcessor.class);
@@ -84,10 +85,24 @@ public class RouterImpl implements Router {
             processor.process();
 
 
-        } else if (isStartDateValid || isThresHoldValid || isDurationValid) {
-            LOGGER.error("To do a search you must specify all search parameters (startDate, threshold, duration).");
+        } else if (isStartDateValid || isThresholdValid || isDurationValid) {
+            throw new ParserException(ParserCode.NOT_ENOUGH_SEARCH_ARGUMENTS);
         }
+    }
 
+    public void setLogFile(String logFile) {
+        this.logFile = logFile;
+    }
 
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setThreshold(Integer threshold) {
+        this.threshold = threshold;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
     }
 }
